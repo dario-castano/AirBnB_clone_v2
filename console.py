@@ -10,7 +10,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-from shlex import split
+import shlex
 
 
 class HBNBCommand(cmd.Cmd):
@@ -33,20 +33,26 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def do_create(self, line):
-        """Creates a new instance of BaseModel, saves it
+        """Creates a new instance of our all_classes, saves it
         Exceptions:
             SyntaxError: when there is no args given
             NameError: when there is no object taht has the name
         """
+        my_list = shlex.split(line)
+        if len(my_list) == 0:
+            print("** class name missing **")
+            return
         try:
-            if not line:
-                raise SyntaxError()
-            my_list = line.split(" ")
             obj = eval("{}()".format(my_list[0]))
+            if len(my_list) > 1:
+                obj_dict = dict(arg.split('=') for arg in my_list[1:])
+                for key, value in obj_dict.items():
+                    if hasattr(obj, key):
+                        if '_' in value:
+                            value = value.replace('_', ' ')
+                        setattr(obj, key, type(getattr(obj, key))(value))
             obj.save()
             print("{}".format(obj.id))
-        except SyntaxError:
-            print("** class name missing **")
         except NameError:
             print("** class doesn't exist **")
 
