@@ -91,6 +91,14 @@ class TestFileStorage(unittest.TestCase):
                 self.assertEqual(line, "{}")
         self.assertIs(self.storage.reload(), None)
 
+    def test_all_class(self):
+        """
+        tests if all works in File Storage with a class
+        """
+        storage = FileStorage()
+        all_users = storage.all(User)
+        self.assertNotEqual(len(all_users), 0)
+
 
 if __name__ == "__main__":
     unittest.main()
