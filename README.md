@@ -117,7 +117,6 @@ Also you can test file by file using this command:
 | `quit` | `quit` | `quit` | Quits the console |
 | `EOF` | `Ctr+D` | `EOF` | Quits the console with keyboard interruption |
 
-
 ---
 
 ### Usage
