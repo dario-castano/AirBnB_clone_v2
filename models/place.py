@@ -1,9 +1,23 @@
 #!/usr/bin/python3
 """This is the place class"""
-from models.base_model import BaseModel
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+import models
+from models.base_model import BaseModel, Base
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 import os
+
+
+place_amenity = Table('place_amenity',
+                      Base.metadata,
+                      Column(
+                             'place.id', String(60), ForeignKey('places.id'),
+                             nullable=False, primary_key=True
+                      ),
+                      Column(
+                             'amenity_id', String(60),
+                             ForeignKey('amenities.id'),
+                             nullable=False, primary_key=True
+                      ))
 
 
 class Place(BaseModel, Base):
@@ -37,6 +51,10 @@ class Place(BaseModel, Base):
         latitude = Column(Float, nullable=False)
         longitude = Column(Float, nullable=False)
         reviews = relationship("Review", passive_deletes=True, backref="place")
+        amenities = relationship(
+                                 "Amenity", secondary=place_amenity,
+                                 back_populates="place_amenities",
+                                 view_only=False)
     else:
         city_id = ""
         user_id = ""
@@ -61,3 +79,27 @@ class Place(BaseModel, Base):
                 if rev.place_id == self.id:
                     review_list.append(rev)
             return rev
+
+        @property
+        def amenities(self):
+            """
+            Getter
+            Returns the list of Amenity instances based on the attribute
+            amenity_ids that contains all Amenity.id linked to the Place
+            """
+            obj_list = []
+            objs = models.storage.all("Amenity")
+            for amen in objs.value():
+                obj_list.append(amen)
+            return obj_list
+
+        @amenities.setter
+        def amenities(self, obj):
+            """
+            Setter
+            Handles append method for adding an Amenity.id
+            to the attribute amenity_ids
+            """
+            if isinstance(obj, Amenity):
+                if self.id == obj.place_id:
+                    self.amenity_ids.append(obj.id)
