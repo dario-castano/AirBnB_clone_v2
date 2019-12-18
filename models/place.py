@@ -10,7 +10,7 @@ import os
 place_amenity = Table('place_amenity',
                       Base.metadata,
                       Column(
-                             'place.id', String(60), ForeignKey('places.id'),
+                             'place_id', String(60), ForeignKey('places.id'),
                              nullable=False, primary_key=True
                       ),
                       Column(
@@ -54,7 +54,7 @@ class Place(BaseModel, Base):
         amenities = relationship(
                                  "Amenity", secondary=place_amenity,
                                  back_populates="place_amenities",
-                                 view_only=False)
+                                 viewonly=False)
     else:
         city_id = ""
         user_id = ""
@@ -88,9 +88,10 @@ class Place(BaseModel, Base):
             amenity_ids that contains all Amenity.id linked to the Place
             """
             obj_list = []
-            objs = models.storage.all("Amenity")
+            objs = models.storage.all('Amenity')
             for amen in objs.value():
-                obj_list.append(amen)
+                if amen.id in amenities_ids:
+                    obj_list.append(amen)
             return obj_list
 
         @amenities.setter
