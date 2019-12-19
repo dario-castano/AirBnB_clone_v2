@@ -14,15 +14,12 @@ class TestAmenity(unittest.TestCase):
     def setUpClass(cls):
         """set up for test"""
         cls.amenity = Amenity()
-        cls.amenity.name = "Breakfast"
+        cls.amenity.name = "Swimming Pool"
 
     @classmethod
-    def teardown(cls):
-        """at the end of the test this will tear it down"""
-        del cls.amenity
-
     def tearDown(self):
         """teardown"""
+        del cls.amenity
         try:
             os.remove("file.json")
         except Exception:
@@ -52,6 +49,9 @@ class TestAmenity(unittest.TestCase):
     def test_attribute_types_Amenity(self):
         """test attribute type for Amenity"""
         self.assertEqual(type(self.amenity.name), str)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "Won't work in DB")
 
     def test_save_Amenity(self):
         """test if the save works"""

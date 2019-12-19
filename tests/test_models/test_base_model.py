@@ -41,6 +41,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsNotNone(BaseModel.__str__.__doc__)
         self.assertIsNotNone(BaseModel.save.__doc__)
         self.assertIsNotNone(BaseModel.to_dict.__doc__)
+        self.assertIsNotNone(BaseModel.delete.__doc__)
 
     def test_method_BaseModel(self):
         """chekcing if Basemodel have methods"""
@@ -51,6 +52,9 @@ class TestBaseModel(unittest.TestCase):
     def test_init_BaseModel(self):
         """test if the base is an type BaseModel"""
         self.assertTrue(isinstance(self.base, BaseModel))
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "Won't work in DB")
 
     def test_save_BaesModel(self):
         """test if the save works"""

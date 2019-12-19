@@ -14,7 +14,7 @@ class TestState(unittest.TestCase):
     def setUpClass(cls):
         """set up for test"""
         cls.state = State()
-        cls.state.name = "CA"
+        cls.state.name = "California"
 
     @classmethod
     def teardown(cls):
@@ -37,6 +37,9 @@ class TestState(unittest.TestCase):
     def test_checking_for_docstring_State(self):
         """checking for docstrings"""
         self.assertIsNotNone(State.__doc__)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "Won't work in DB")
 
     def test_attributes_State(self):
         """chekcing if State have attributes"""

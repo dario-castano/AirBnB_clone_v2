@@ -14,8 +14,8 @@ class TestCity(unittest.TestCase):
     def setUpClass(cls):
         """set up for test"""
         cls.city = City()
-        cls.city.name = "LA"
-        cls.city.state_id = "CA"
+        cls.city.name = "SJ"
+        cls.city.state_id = "95a5abab"
 
     @classmethod
     def teardown(cls):
@@ -50,6 +50,9 @@ class TestCity(unittest.TestCase):
     def test_is_subclass_City(self):
         """test if City is subclass of Basemodel"""
         self.assertTrue(issubclass(self.city.__class__, BaseModel), True)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "Won't work in DB")
 
     def test_attribute_types_City(self):
         """test attribute type for City"""

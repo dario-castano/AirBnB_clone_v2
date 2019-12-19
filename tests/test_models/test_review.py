@@ -14,9 +14,9 @@ class TestReview(unittest.TestCase):
     def setUpClass(cls):
         """set up for test"""
         cls.rev = Review()
-        cls.rev.place_id = "4321-dcba"
-        cls.rev.user_id = "123-bca"
-        cls.rev.text = "The srongest in the Galaxy"
+        cls.rev.place_id = "95a5abab"
+        cls.rev.user_id = "a7db3cdc"
+        cls.rev.text = "Good place"
 
     @classmethod
     def teardown(cls):
@@ -52,6 +52,9 @@ class TestReview(unittest.TestCase):
     def test_is_subclass_Review(self):
         """test if review is subclass of BaseModel"""
         self.assertTrue(issubclass(self.rev.__class__, BaseModel), True)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "Won't work in DB")
 
     def test_attribute_types_Review(self):
         """test attribute type for Review"""

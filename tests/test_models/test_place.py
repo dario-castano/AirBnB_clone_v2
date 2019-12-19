@@ -14,17 +14,17 @@ class TestPlace(unittest.TestCase):
     def setUpClass(cls):
         """set up for test"""
         cls.place = Place()
-        cls.place.city_id = "1234-abcd"
-        cls.place.user_id = "4321-dcba"
-        cls.place.name = "Death Star"
-        cls.place.description = "UNLIMITED POWER!!!!!"
-        cls.place.number_rooms = 1000000
-        cls.place.number_bathrooms = 1
-        cls.place.max_guest = 607360
-        cls.place.price_by_night = 10
-        cls.place.latitude = 160.0
-        cls.place.longitude = 120.0
-        cls.place.amenity_ids = ["1324-lksdjkl"]
+        cls.place.city_id = "a7db3cdc"
+        cls.place.user_id = "95a5abab"
+        cls.place.name = "Rest"
+        cls.place.description = "Good place to rest"
+        cls.place.number_rooms = 100000
+        cls.place.number_bathrooms = 3
+        cls.place.max_guest = 5986
+        cls.place.price_by_night = 30
+        cls.place.latitude = 100.0
+        cls.place.longitude = 10.0
+        cls.place.amenity_ids = ["4b457e66-c7c8"]
 
     @classmethod
     def teardown(cls):
@@ -47,6 +47,9 @@ class TestPlace(unittest.TestCase):
     def test_checking_for_docstring_Place(self):
         """checking for docstrings"""
         self.assertIsNotNone(Place.__doc__)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "Won't work in DB")
 
     def test_attributes_Place(self):
         """chekcing if amenity have attributes"""

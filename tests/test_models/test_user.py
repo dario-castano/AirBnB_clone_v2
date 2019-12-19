@@ -14,10 +14,10 @@ class TestUser(unittest.TestCase):
     def setUpClass(cls):
         """set up for test"""
         cls.user = User()
-        cls.user.first_name = "Kevin"
-        cls.user.last_name = "Yook"
-        cls.user.email = "yook00627@gmamil.com"
-        cls.user.password = "secret"
+        cls.user.first_name = "Daniela"
+        cls.user.last_name = "Chamorro"
+        cls.user.email = "dalexach@gmamil.com"
+        cls.user.password = "yo"
 
     @classmethod
     def teardown(cls):
@@ -54,6 +54,9 @@ class TestUser(unittest.TestCase):
     def test_is_subclass_User(self):
         """test if User is subclass of Basemodel"""
         self.assertTrue(issubclass(self.user.__class__, BaseModel), True)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "Won't work in DB")
 
     def test_attribute_types_User(self):
         """test attribute type for User"""
