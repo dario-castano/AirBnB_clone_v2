@@ -50,7 +50,12 @@ class HBNBCommand(cmd.Cmd):
                     if hasattr(obj, key):
                         if '_' in value:
                             value = value.replace('_', ' ')
-                        setattr(obj, key, type(getattr(obj, key))(value))
+                        try:
+                            value = eval(value)
+                        except Exception:
+                            pass
+                    setattr(obj, key, value)
+                    # setattr(obj, key, type(getattr(obj, key))(value))
             obj.save()
             print("{}".format(obj.id))
         except NameError:
