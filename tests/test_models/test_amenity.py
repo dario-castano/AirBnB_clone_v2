@@ -17,9 +17,12 @@ class TestAmenity(unittest.TestCase):
         cls.amenity.name = "Swimming Pool"
 
     @classmethod
+    def teardown(cls):
+        """at the end of the test this will tear it down"""
+        del cls.amenity
+
     def tearDown(self):
         """teardown"""
-        del cls.amenity
         try:
             os.remove("file.json")
         except Exception:

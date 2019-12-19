@@ -40,7 +40,8 @@ class DBStorage:
         self.__session = sessionmaker(self.__engine)()
 
         if self.config['env'] == 'test':
-            sqlalchemy.MetaData(self.__engine).reflect().drop_all()
+            Base.metadata.drop_all(bind=self.__engine)
+            # Base.MetaData(self.__engine).reflect().drop_all()
 
     def all(self, cls=None):
         """ Get all data from the DB
