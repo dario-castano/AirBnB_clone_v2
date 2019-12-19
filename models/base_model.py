@@ -38,13 +38,13 @@ class BaseModel:
             self.created_at = self.updated_at = datetime.now()
             models.storage.new(self)
 
-        if self.created_at in kwargs:
+        if "created_at" in kwargs:
             kwargs["created_at"] = datetime.strptime(kwargs["created_at"],
                                                      "%Y-%m-%dT%H:%M:%S.%f")
         else:
             self.created_at = datetime.now()
 
-        if self.updated_at in kwargs:
+        if "updated_at" in kwargs:
             kwargs["updated_at"] = datetime.strptime(kwargs["updated_at"],
                                                      "%Y-%m-%dT%H:%M:%S.%f")
         else:
@@ -63,7 +63,7 @@ class BaseModel:
             returns a string of class name, id, and dictionary
         """
         return "[{}] ({}) {}".format(
-            type(self).__name__, self.id, self.__dict__)
+            type(self).__name__, self.id, self.to_dict())
 
     def __repr__(self):
         """return a string representaion
@@ -74,6 +74,7 @@ class BaseModel:
         """updates the public instance attribute updated_at to current
         """
         self.updated_at = datetime.now()
+        models.storage.new(self)
         models.storage.save()
 
     def to_dict(self):
@@ -81,15 +82,16 @@ class BaseModel:
         Return:
             returns a dictionary of all the key values in __dict__
         """
-        my_dict = dict(self.__dict__)
-        my_dict["__class__"] = str(type(self).__name__)
-        my_dict["created_at"] = self.created_at.isoformat()
-        my_dict["updated_at"] = self.updated_at.isoformat()
+        obj_dict = dict(self.__dict__)
+        obj_dict["__class__"] = str(type(self).__name__)
+        obj_dict["created_at"] = self.created_at.isoformat()
+        obj_dict["updated_at"] = self.updated_at.isoformat()
 
-        if "_sa_instance_state" in my_dict:
-            del my_dict["_sa_instance_state"]
+        if "_sa_instance_state" in obj_dict:
+            obj_dict.pop("_sa_instance_state")
+            """del obj_dict["_sa_instance_state"]"""
 
-        return my_dict
+        return obj_dict
 
     def delete(self):
         """
