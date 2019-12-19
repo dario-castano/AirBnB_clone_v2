@@ -48,7 +48,7 @@ class DBStorage:
         resultset = {}
 
         if cls is None:
-            for key, val in models_dict:
+            for key, val in models_dict.items():
                 query = self.__session.query(val)
                 for obj in query:
                     keyname = "{}.{}".format(key, obj.id)
