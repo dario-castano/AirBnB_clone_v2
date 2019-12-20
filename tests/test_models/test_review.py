@@ -2,7 +2,11 @@
 """test for review"""
 import unittest
 import os
+from models.city import City
+from models.user import User
+from models.state import State
 from models.review import Review
+from models.place import Place
 from models.base_model import BaseModel
 import pep8
 
@@ -13,9 +17,39 @@ class TestReview(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """set up for test"""
+        cls.user = User()
+        cls.user.first_name = "Armando"
+        cls.user.last_name = "Casas"
+        cls.user.id = "10"
+        cls.user.email = "123@aoeu.com"
+        cls.user.password = "apasswd"
+        cls.user.save()
+
+        cls.state = State(name="New Mexico", id="22")
+        cls.state.save()
+
+        cls.city = City()
+        cls.city.name = "Farmington"
+        cls.city.state_id = "22"
+        cls.city.save()
+
+        cls.place = Place()
+        cls.place.id = "99"
+        cls.place.city_id = "24"
+        cls.place.user_id = "10"
+        cls.place.name = "Rest"
+        cls.place.description = "Good place to rest"
+        cls.place.number_rooms = 100000
+        cls.place.number_bathrooms = 3
+        cls.place.max_guest = 5986
+        cls.place.price_by_night = 30
+        cls.place.latitude = 100.0
+        cls.place.longitude = 10.0
+        cls.place.save()
+
         cls.rev = Review()
-        cls.rev.place_id = "95a5abab"
-        cls.rev.user_id = "a7db3cdc"
+        cls.rev.place_id = "99"
+        cls.rev.user_id = "10"
         cls.rev.text = "Good place"
 
     @classmethod

@@ -2,7 +2,10 @@
 """test for place"""
 import unittest
 import os
+from models.state import State
 from models.place import Place
+from models.user import User
+from models.city import City
 from models.base_model import BaseModel
 import pep8
 
@@ -13,9 +16,23 @@ class TestPlace(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """set up for test"""
+        cls.user = User()
+        cls.user.first_name = "Armando"
+        cls.user.last_name = "Casas"
+        cls.user.id = "10"
+        cls.user.email = "123@aoeu.com"
+        cls.user.password = "apasswd"
+        cls.user.save()
+        cls.state = State()
+        cls.state.name = "New Mexico"
+        cls.state.id = "8"
+        cls.state.save()
+        cls.city = City()
+        cls.city.state_id = "8"
+        cls.city.id = "24"
         cls.place = Place()
-        cls.place.city_id = "a7db3cdc"
-        cls.place.user_id = "95a5abab"
+        cls.place.city_id = "24"
+        cls.place.user_id = "10"
         cls.place.name = "Rest"
         cls.place.description = "Good place to rest"
         cls.place.number_rooms = 100000
@@ -24,7 +41,6 @@ class TestPlace(unittest.TestCase):
         cls.place.price_by_night = 30
         cls.place.latitude = 100.0
         cls.place.longitude = 10.0
-        cls.place.amenity_ids = ["4b457e66-c7c8"]
 
     @classmethod
     def teardown(cls):
@@ -66,7 +82,7 @@ class TestPlace(unittest.TestCase):
         self.assertTrue('price_by_night' in self.place.__dict__)
         self.assertTrue('latitude' in self.place.__dict__)
         self.assertTrue('longitude' in self.place.__dict__)
-        self.assertTrue('amenity_ids' in self.place.__dict__)
+
 
     def test_is_subclass_Place(self):
         """test if Place is subclass of Basemodel"""
@@ -84,7 +100,7 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(type(self.place.price_by_night), int)
         self.assertEqual(type(self.place.latitude), float)
         self.assertEqual(type(self.place.longitude), float)
-        self.assertEqual(type(self.place.amenity_ids), list)
+
 
     def test_save_Place(self):
         """test if the save works"""

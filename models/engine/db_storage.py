@@ -5,6 +5,7 @@ import sqlalchemy
 from models.base_model import Base
 from .model_registry import models_dict
 from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.scoping import scoped_session
 
@@ -43,6 +44,9 @@ class DBStorage:
             Base.metadata.drop_all(bind=self.__engine)
             # Base.MetaData(self.__engine).reflect().drop_all()
 
+    def __del__(self):
+        self.__session.close()
+
     def all(self, cls=None):
         """ Get all data from the DB
         """
@@ -71,7 +75,10 @@ class DBStorage:
     def save(self):
         """Save session to the DB
         """
-        self.__session.commit()
+        try:
+            self.__session.commit()
+        except Exception:
+            self.__session.rollback()
 
     def delete(self, obj=None):
         """Delete an object from the session

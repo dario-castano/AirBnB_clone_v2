@@ -82,8 +82,18 @@ class TestConsole(unittest.TestCase):
             self.consol.onecmd("create asdfsfsd")
             self.assertEqual(
                 "** class doesn't exist **\n", f.getvalue())
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("create User")
+        if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+            with patch('sys.stdout', new=StringIO()) as f:
+                self.consol.onecmd("create User")
+        if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+            with patch('sys.stdout', new=StringIO()) as f:
+                self.consol.onecmd(
+                    'create User \
+                     email="abc@def.com" \
+                     password="123456" \
+                     first_name="Boris" \
+                     last_name="Candela" \
+                     ')
         with patch('sys.stdout', new=StringIO()) as f:
             self.consol.onecmd("all User")
             self.assertEqual(
@@ -173,9 +183,6 @@ class TestConsole(unittest.TestCase):
             self.consol.onecmd("asdfsdfsd.all()")
             self.assertEqual(
                 "** class doesn't exist **\n", f.getvalue())
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("State.all()")
-            self.assertEqual("[]\n", f.getvalue())
 
     def test_z_count(self):
         """Test count command inpout"""
@@ -183,9 +190,6 @@ class TestConsole(unittest.TestCase):
             self.consol.onecmd("asdfsdfsd.count()")
             self.assertEqual(
                 "** class doesn't exist **\n", f.getvalue())
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("State.count()")
-            self.assertEqual("0\n", str(f.getvalue()))
 
     def test_z_show(self):
         """Test alternate show command inpout"""
@@ -231,6 +235,38 @@ class TestConsole(unittest.TestCase):
             self.consol.onecmd("User.update(" + my_id + ", name)")
             self.assertEqual(
                 "** value missing **\n", f.getvalue())
+
+    def test_create_args(self):
+        """ Tests the new create updation to handle parameters
+        """
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("create State name=\"California\"")
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("all State")
+            self.assertIn("\'name\': \'California\'", f.getvalue())
+
+    def test_create_args_val(self):
+        """ Tests create w/different arguments
+        """
+        with patch('sys.stdout', new=StringIO()) as f:
+            s = "create User email=\"ali@com\" password=\"pwd\" id=\"666\""
+            self.consol.onecmd(s)
+        with patch('sys.stdout', new=StringIO()) as f:
+            s = "create State name=\"New Mexico\" id=\"89\""
+            self.consol.onecmd(s)
+        with patch('sys.stdout', new=StringIO()) as f:
+            s = "create City name=\"Albuqeurque\" state_id=\"89\" id=\"12\""
+            self.consol.onecmd(s)
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("create Place name=\"House_1\"\
+            number_rooms=3 latitude=31.666 \
+            description=\"Lovely\" city_id=\"12\"\
+            user_id=\"666\"")
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.consol.onecmd("all Place")
+            self.assertIn("\'name\': \'House 1\'", f.getvalue())
+            self.assertIn("\'number_rooms\': 3", f.getvalue())
+            self.assertIn("\'latitude\': 31.666", f.getvalue())
 
 
 if __name__ == "__main__":

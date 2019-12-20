@@ -2,6 +2,7 @@
 """test for city"""
 import unittest
 import os
+from models.state import State
 from models.city import City
 from models.base_model import BaseModel
 import pep8
@@ -13,14 +14,17 @@ class TestCity(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """set up for test"""
+        cls.state = State(name="New Mexico", id="22")
+        cls.state.save()
         cls.city = City()
-        cls.city.name = "SJ"
-        cls.city.state_id = "95a5abab"
+        cls.city.name = "Farmington"
+        cls.city.state_id = "22"
 
     @classmethod
     def teardown(cls):
         """at the end of the test this will tear it down"""
         del cls.city
+        del cls.state
 
     def tearDown(self):
         """teardown"""
@@ -53,7 +57,6 @@ class TestCity(unittest.TestCase):
 
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
                      "Won't work in DB")
-
     def test_attribute_types_City(self):
         """test attribute type for City"""
         self.assertEqual(type(self.city.name), str)

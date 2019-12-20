@@ -4,6 +4,7 @@ import unittest
 import pep8
 import json
 import os
+import models
 import MySQLdb
 from models.engine.db_storage import DBStorage
 from models.base_model import BaseModel
