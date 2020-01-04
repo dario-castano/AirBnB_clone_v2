@@ -21,7 +21,7 @@ def do_pack():
     local("tar -zcvf '{}' web_static".format(filename))
 
     if os.path.exists(filename):
-        return outpath
+        return filename
     else:
         return None
 
@@ -29,11 +29,10 @@ def do_pack():
 def do_deploy(archive_path):
     """Deploys to the nodes
     """
-    if os.path.exists(archive_path):
+    if os.path.isfile(archive_path):
         tar_name = re.search('web_static_[0-9]*.tgz', archive_path).group(0)
         untar_path = "/data/web_static/releases/{}"\
             .format(tar_name.replace('.tgz', ''))
-
         put(archive_path, '/tmp')
         run("mkdir -p {}".format(untar_path))
         run("tar -zxf /tmp/{} -C {}".format(tar_name, untar_path))
@@ -52,4 +51,8 @@ def deploy():
     """Runs full deployment
     """
     pack = do_pack()
-    return do_deploy(pack) if pack else False
+    print(pack)
+    dep = do_deploy(pack)
+    print(dep)
+    return dep
+
