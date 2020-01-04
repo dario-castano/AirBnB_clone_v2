@@ -53,3 +53,17 @@ def deploy():
     pack = do_pack()
     dep = do_deploy(pack)
     return dep
+
+
+def do_clean(number=0):
+    """Cleans old deployment files
+    """
+    local_path = './versions/'
+    remote_path = '/data/web_static/releases/'
+
+    if number >= 0:
+        number = 1 if number == 0 else number
+        local('for i in `ls -1t {} | tail -n +{}`; do rm -f {}$i ; done'
+              .format(local_path, number + 1, local_path))
+        run('for i in `ls -1t {} | tail -n +{}`; do rm -rf {}$i ; done'
+            .format(remote_path, number + 1, remote_path))
