@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # Preparing the web server
 
-LOCATION="\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n"
-
 sudo apt-get update
 sudo apt-get install -y nginx
 
