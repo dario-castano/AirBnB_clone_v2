@@ -58,6 +58,7 @@ def deploy():
 def do_clean(number=0):
     """Cleans old deployment files
     """
+    number = int(number)
     local_path = './versions/'
     remote_path = '/data/web_static/releases/'
 
