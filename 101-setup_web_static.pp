@@ -1,33 +1,48 @@
 # Configure a nginx server with header
 
+group { 'ubuntu':
+  ensure => 'present'
+}
+
+user { 'ubuntu':
+  ensure  => 'present',
+  groups  => 'ubuntu',
+  require => Group['ubuntu']
+}
+
 file{'/data':
-  ensure => 'directory',
-  owner  => 'ubuntu'
-  group  => 'ubuntu'
+  ensure  => 'directory',
+  owner   => 'ubuntu',
+  group   => 'ubuntu',
+  require => User['ubuntu']
 }
 
 file{'/data/web_static':
   ensure => 'directory',
-  owner  => 'ubuntu'
-  group  => 'ubuntu'
+  owner  => 'ubuntu',
+  group  => 'ubuntu',
+  require => User['ubuntu']
 }
 
 file{'/data/web_static/releases':
   ensure => 'directory',
-  owner  => 'ubuntu'
-  group  => 'ubuntu'
+  owner  => 'ubuntu',
+  group  => 'ubuntu',
+  require => User['ubuntu']
 }
 
 file{'/data/web_static/shared':
   ensure => 'directory',
-  owner  => 'ubuntu'
-  group  => 'ubuntu'
+  owner  => 'ubuntu',
+  group  => 'ubuntu',
+  require => User['ubuntu']
 }
 
 file{'/data/web_static/releases/test':
   ensure => 'directory',
-  owner  => 'ubuntu'
-  group  => 'ubuntu'
+  owner  => 'ubuntu',
+  group  => 'ubuntu',
+  require => User['ubuntu']
 }
 
 file{'/data/web_static/current':
@@ -42,13 +57,13 @@ exec{'download_fakehtml':
 }
 
 package{'nginx':
-  ensure   => 'installed'
+  ensure   => 'installed',
   name     => 'nginx',
   provider => 'apt',
 }
 
 exec{'download_conf':
-  command => '/usr/bin/wget -q https://raw.githubusercontent.com/dario-castano/AirBnB_clone_v2/master/default.txt -O /etc/nginx/nginx.conf',
+  command => '/usr/bin/wget -q https://raw.githubusercontent.com/dario-castano/AirBnB_clone_v2/master/default.txt -O /etc/nginx/sites-available/default',
   require => Package['nginx']
 }
 
@@ -59,7 +74,7 @@ service{'nginx_service':
   require => [Package['nginx'], Exec['download_conf']]
 }
 
-file{'/etc/nginx/nginx.conf':
+file{'/etc/nginx/sites-available/default':
   notify  => Service['nginx_service'],
   require => Package['nginx']
 }
