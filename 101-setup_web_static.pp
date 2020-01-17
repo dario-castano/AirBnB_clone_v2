@@ -1,4 +1,7 @@
 # Configure a nginx server with header
+exec {'apt_update':
+  command => 'apt-get update -y'
+}
 
 group { 'ubuntu':
   ensure => 'present'
@@ -60,6 +63,7 @@ package{'nginx':
   ensure   => 'installed',
   name     => 'nginx',
   provider => 'apt',
+  require => Exec['apt_update']
 }
 
 exec{'download_conf':
