@@ -1,7 +1,7 @@
 # Configure a nginx server with header
 exec {'apt_update':
   command => 'apt-get update -y',
-  path => '/usr/bin/'
+  path    => '/usr/bin/'
 }
 
 group { 'ubuntu':
