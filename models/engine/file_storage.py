@@ -70,3 +70,8 @@ class FileStorage:
             key = str(obj.__class__.__name__) + "." + obj.id
             del self.__objects[key]
             self.save()
+
+    def close(self):
+        """ Calls reload
+        """
+        self.reload()
