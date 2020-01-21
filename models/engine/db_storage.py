@@ -96,6 +96,6 @@ class DBStorage:
         ))
 
     def close(self):
-        """Close the DB
+        """Closes the DBStorage
         """
-        self.__session.close()
+        self.__session.remove()
