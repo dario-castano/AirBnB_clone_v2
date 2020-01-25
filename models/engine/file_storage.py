@@ -29,9 +29,9 @@ class FileStorage:
             return self.__objects
         else:
             obje = {}
-            for obj, key in self.__objects.items():
-                if type(key) == cls:
-                    obje = {obj: key}
+            for key, obj in self.__objects.items():
+                if type(obj) == cls:
+                    obje[key] = obj
             return obje
 
     def new(self, obj):
